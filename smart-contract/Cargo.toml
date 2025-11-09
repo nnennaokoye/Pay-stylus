@@ -34,6 +34,7 @@ path = "src/main.rs"
 
 [lib]
 crate-type = ["lib", "cdylib"]
+path = "lib.rs"
 
 [profile.release]
 codegen-units = 1        # prefer efficiency to compile time
