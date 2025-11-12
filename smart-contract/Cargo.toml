@@ -3,8 +3,8 @@ name = "subscription-engine"
 version = "0.1.0"
 edition = "2021"
 license = "MIT OR Apache-2.0"
-homepage = "https://github.com/Akhil-Rawat/MVP"
-repository = "https://github.com/Akhil-Rawat/MVP"
+homepage = "https://github.com/nnennaokoye/Pay-stylus"
+repository = "https://github.com/nnennaokoye/Pay-stylus"
 keywords = ["arbitrum", "ethereum", "stylus", "subscription"]
 description = "Stylus subscription engine smart contract"
 
@@ -27,10 +27,6 @@ default = ["mini-alloc"]
 export-abi = ["stylus-sdk/export-abi"]
 debug = ["stylus-sdk/debug"]
 mini-alloc = ["stylus-sdk/mini-alloc"]
-
-[[bin]]
-name = "subscription-engine"
-path = "src/main.rs"
 
 [lib]
 crate-type = ["lib", "cdylib"]

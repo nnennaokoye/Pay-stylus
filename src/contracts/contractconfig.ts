@@ -1,11 +1,11 @@
 import CONTRACT_ABI_JSON from "../../complete-abi.json" assert { type: "json" };
 
 export const CONTRACT_CONFIG = {
-  CONTRACT_ADDRESS: "0xe65365Ea1cfb28dafD5fF6246a2E2A124A13093B",
+  CONTRACT_ADDRESS: "0xdbb07ad146a1db553811a26c1e838bfa7fdb84cf",
   CONTRACT_ABI: CONTRACT_ABI_JSON,
   NETWORK_ID: 421614,
   NETWORK_NAME: "Arbitrum Sepolia",
-  NETWORK_RPC_URL: "https://sepolia-rollup.arbitrum.io/rpc",
+  NETWORK_RPC_URL: "https://arb-sepolia.g.alchemy.com/v2/sriH8r9wrKXR8Gz9faKsm",
 };
 
 export const CONTRACT_FUNCTIONS = {

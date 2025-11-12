@@ -48,7 +48,7 @@ cd ~/StreamPay-arbitrum/smart-contract
 
 ### Step 2: Verify Contract Compiles
 ```bash
-cargo stylus check --endpoint=https://sepolia-rollup.arbitrum.io/rpc
+cargo stylus check --endpoint=https://arb-sepolia.g.alchemy.com/v2/sriH8r9wrKXR8Gz9faKsm
 ```
 
 **Expected Output:**
@@ -75,7 +75,7 @@ export PRIVATE_KEY="your_private_key_here"
 
 # Deploy contract
 cargo stylus deploy \
-  --endpoint=https://sepolia-rollup.arbitrum.io/rpc \
+  --endpoint=https://arb-sepolia.g.alchemy.com/v2/sriH8r9wrKXR8Gz9faKsm \
   --private-key=$PRIVATE_KEY \
   --no-verify
 ```
@@ -100,7 +100,7 @@ cargo stylus export-abi > abi.json
 cast send 0xYourNewContractAddress \
   "initialize()" \
   --private-key YOUR_PRIVATE_KEY \
-  --rpc-url https://sepolia-rollup.arbitrum.io/rpc
+  --rpc-url https://arb-sepolia.g.alchemy.com/v2/sriH8r9wrKXR8Gz9faKsm
 ```
 
 ### Step 7: Verify Initialization
@@ -108,7 +108,7 @@ cast send 0xYourNewContractAddress \
 # Check if admin is set (should return your wallet address)
 cast call 0xYourNewContractAddress \
   "admin()(address)" \
-  --rpc-url https://sepolia-rollup.arbitrum.io/rpc
+  --rpc-url https://arb-sepolia.g.alchemy.com/v2/sriH8r9wrKXR8Gz9faKsm
 ```
 
 ---
@@ -124,7 +124,7 @@ export const CONTRACT_CONFIG = {
   CONTRACT_ABI: CONTRACT_ABI_JSON,
   NETWORK_ID: 421614,
   NETWORK_NAME: "Arbitrum Sepolia",
-  NETWORK_RPC_URL: "https://sepolia-rollup.arbitrum.io/rpc",
+  NETWORK_RPC_URL: "https://arb-sepolia.g.alchemy.com/v2/sriH8r9wrKXR8Gz9faKsm",
 };
 ```
 
@@ -158,7 +158,7 @@ Edit `CONTRACT_INFO.md` with new address and deployment details.
 cast send 0xYourNewContractAddress \
   "registerProvider(string)" "MyProvider" \
   --private-key YOUR_PRIVATE_KEY \
-  --rpc-url https://sepolia-rollup.arbitrum.io/rpc
+  --rpc-url https://arb-sepolia.g.alchemy.com/v2/sriH8r9wrKXR8Gz9faKsm
 ```
 
 ### 2. Create a Test Plan
@@ -168,7 +168,7 @@ cast send 0xYourNewContractAddress \
   "createPlan(uint256,uint256,string)" \
   1000000000000000 60 "test-plan" \
   --private-key YOUR_PRIVATE_KEY \
-  --rpc-url https://sepolia-rollup.arbitrum.io/rpc
+  --rpc-url https://arb-sepolia.g.alchemy.com/v2/sriH8r9wrKXR8Gz9faKsm
 ```
 
 ### 3. Deposit to Escrow
@@ -177,14 +177,14 @@ cast send 0xYourNewContractAddress \
   "deposit()" \
   --value 10000000000000000 \
   --private-key YOUR_PRIVATE_KEY \
-  --rpc-url https://sepolia-rollup.arbitrum.io/rpc
+  --rpc-url https://arb-sepolia.g.alchemy.com/v2/sriH8r9wrKXR8Gz9faKsm
 ```
 
 ### 4. Check Balance
 ```bash
 cast call 0xYourNewContractAddress \
   "getUserBalance(address)" YOUR_WALLET_ADDRESS \
-  --rpc-url https://sepolia-rollup.arbitrum.io/rpc
+  --rpc-url https://arb-sepolia.g.alchemy.com/v2/sriH8r9wrKXR8Gz9faKsm
 ```
 
 ### 5. Subscribe to Plan
@@ -192,7 +192,7 @@ cast call 0xYourNewContractAddress \
 cast send 0xYourNewContractAddress \
   "subscribe(uint256)" 1 \
   --private-key YOUR_PRIVATE_KEY \
-  --rpc-url https://sepolia-rollup.arbitrum.io/rpc
+  --rpc-url https://arb-sepolia.g.alchemy.com/v2/sriH8r9wrKXR8Gz9faKsm
 ```
 
 ---
@@ -226,7 +226,7 @@ cargo build --release --target wasm32-unknown-unknown
 ### Issue: "Network not supported"
 **Solution:** Ensure you're using Arbitrum Sepolia RPC:
 ```
-https://sepolia-rollup.arbitrum.io/rpc
+https://arb-sepolia.g.alchemy.com/v2/sriH8r9wrKXR8Gz9faKsm
 ```
 
 ### Issue: "Initialize already called"
@@ -266,6 +266,7 @@ After deployment, verify:
 **Network:** Arbitrum Sepolia  
 **Chain ID:** 421614  
 **RPC:** https://sepolia-rollup.arbitrum.io/rpc  
+**RPC (Alchemy):** https://arb-sepolia.g.alchemy.com/v2/sriH8r9wrKXR8Gz9faKsm  
 **Explorer:** https://sepolia.arbiscan.io  
 **Faucet:** https://faucet.quicknode.com/arbitrum/sepolia  
 

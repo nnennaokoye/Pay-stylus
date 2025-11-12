@@ -3,14 +3,14 @@
 ## 🚀 Current Deployment
 
 ### Contract Details
-- **Address**: `0xe65365Ea1cfb28dafD5fF6246a2E2A124A13093B`
+- **Address**: `0xdbb07ad146a1db553811a26c1e838bfa7fdb84cf`
 - **Network**: Arbitrum Sepolia
 - **Language**: Rust (Stylus)
 - **Size**: 23.6 KiB
 - **Protocol Fee**: 2.5%
 
 ### RPC Endpoints
-- **Primary**: `https://sepolia-rollup.arbitrum.io/rpc`
+- **Primary**: `https://arb-sepolia.g.alchemy.com/v2/sriH8r9wrKXR8Gz9faKsm`
 - **Backup**: `https://arbitrum-sepolia.gateway.pokt.network/v1/lb/`
 
 ### Key Features
@@ -56,8 +56,8 @@ graph deploy --studio subscription-escrow-subgraph
 
 ### Frontend Integration
 ```javascript
-const CONTRACT_ADDRESS = "0xe65365Ea1cfb28dafD5fF6246a2E2A124A13093B";
-const RPC_URL = "https://sepolia-rollup.arbitrum.io/rpc";
+const CONTRACT_ADDRESS = "0xdbb07ad146a1db553811a26c1e838bfa7fdb84cf";
+const RPC_URL = "https://arb-sepolia.g.alchemy.com/v2/sriH8r9wrKXR8Gz9faKsm";
 ```
 
 ## 📊 Provider Analytics
