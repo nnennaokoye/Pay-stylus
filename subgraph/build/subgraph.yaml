@@ -1,0 +1,40 @@
+specVersion: 1.3.0
+indexerHints:
+  prune: auto
+schema:
+  file: schema.graphql
+dataSources:
+  - kind: ethereum
+    name: SubscriptionEscrow
+    network: arbitrum-sepolia
+    source:
+      address: "0xe65365Ea1cfb28dafD5fF6246a2E2A124A13093B"
+      abi: SubscriptionEscrow
+      startBlock: 191825000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.9
+      language: wasm/assemblyscript
+      entities:
+        - Provider
+        - Plan
+        - UserSubscription
+        - Payment
+        - ProviderEarning
+        - GlobalStats
+        - DailyMetric
+      abis:
+        - name: SubscriptionEscrow
+          file: SubscriptionEscrow/SubscriptionEscrow.json
+      eventHandlers:
+        - event: ProviderRegistered(indexed address,string)
+          handler: handleProviderRegistered
+        - event: PlanCreated(indexed uint256,indexed address,uint256,uint256)
+          handler: handlePlanCreated
+        - event: SubscriptionCreated(indexed uint256,indexed address,indexed uint256)
+          handler: handleSubscriptionCreated
+        - event: PaymentProcessed(indexed address,indexed address,uint256,indexed uint256)
+          handler: handlePaymentProcessed
+        - event: ProviderEarnings(indexed address,indexed uint256,uint256)
+          handler: handleProviderEarnings
+      file: SubscriptionEscrow/SubscriptionEscrow.wasm

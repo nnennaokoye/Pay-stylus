@@ -6,8 +6,8 @@ const keys = Object.keys(localStorage);
 console.log("📦 LocalStorage keys:", keys);
 
 // Check specific StreamPay keys
-const subscriptions = localStorage.getItem("streamPaySubscriptions");
-const walletData = localStorage.getItem("streamPayWallet");
+const subscriptions = localStorage.getItem("StreamPaySubscriptions");
+const walletData = localStorage.getItem("StreamPayWallet");
 
 console.log("💳 Subscriptions data:", subscriptions);
 console.log("🔐 Wallet data:", walletData);

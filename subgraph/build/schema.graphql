@@ -1,0 +1,231 @@
+# Core Entities for Provider Analytics
+type Provider @entity(immutable: false) {
+  id: ID! # Provider address
+  address: Bytes!
+  name: String!
+  registeredAt: BigInt!
+  
+  # Provider Analytics
+  totalPlans: BigInt!
+  totalSubscriptions: BigInt!
+  totalRevenue: BigDecimal!
+  totalEarnings: BigDecimal!
+  
+  # Relations
+  plans: [Plan!]! @derivedFrom(field: "provider")
+  earnings: [ProviderEarning!]! @derivedFrom(field: "provider")
+  
+  # Usage Analytics
+  firstPlanCreatedAt: BigInt
+  lastActivityAt: BigInt!
+  isActive: Boolean!
+  
+  # Revenue Metrics
+  monthlyRevenue: BigDecimal!
+  weeklyRevenue: BigDecimal!
+  avgRevenuePerSubscription: BigDecimal!
+}
+
+type Plan @entity(immutable: false) {
+  id: ID! # Plan ID
+  planId: BigInt!
+  provider: Provider!
+  price: BigDecimal!
+  interval: BigInt!
+  createdAt: BigInt!
+  
+  # Plan Analytics
+  totalSubscriptions: BigInt!
+  activeSubscriptions: BigInt!
+  totalRevenue: BigDecimal!
+  
+  # Relations
+  subscriptions: [UserSubscription!]! @derivedFrom(field: "plan")
+  
+  # Performance Metrics
+  subscriptionRate: BigDecimal! # Subscriptions per day
+  avgSubscriptionLength: BigInt!
+  churnRate: BigDecimal!
+  isPopular: Boolean!
+}
+
+type UserSubscription @entity(immutable: false) {
+  id: ID! # Subscription ID
+  subscriptionId: BigInt!
+  plan: Plan!
+  subscriber: Bytes!
+  createdAt: BigInt!
+  
+  # Subscription Status
+  isActive: Boolean!
+  lastPaymentAt: BigInt!
+  nextPaymentDue: BigInt!
+  totalPaid: BigDecimal!
+  paymentCount: BigInt!
+  
+  # Relations
+  payments: [Payment!]! @derivedFrom(field: "subscription")
+  
+  # Lifecycle Analytics
+  subscriptionLength: BigInt!
+  avgPaymentAmount: BigDecimal!
+  status: SubscriptionStatus!
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  PAUSED
+  CANCELLED
+  EXPIRED
+}
+
+type Payment @entity(immutable: true) {
+  id: ID! # Transaction hash + log index
+  subscription: UserSubscription!
+  from: Bytes!
+  to: Bytes!
+  amount: BigDecimal!
+  timestamp: BigInt!
+  transactionHash: Bytes!
+  blockNumber: BigInt!
+  
+  # Payment Analytics
+  isRecurring: Boolean!
+  paymentIndex: BigInt! # 1st, 2nd, 3rd payment etc.
+  protocolFee: BigDecimal!
+  providerAmount: BigDecimal!
+}
+
+type ProviderEarning @entity(immutable: true) {
+  id: ID! # Provider + Plan + Transaction
+  provider: Provider!
+  plan: Plan!
+  amount: BigDecimal!
+  timestamp: BigInt!
+  transactionHash: Bytes!
+  blockNumber: BigInt!
+  
+  # Earning Analytics
+  cumulativeEarnings: BigDecimal!
+  earningType: EarningType!
+}
+
+enum EarningType {
+  INITIAL_SUBSCRIPTION
+  RECURRING_PAYMENT
+  BONUS
+}
+
+# Global Platform Analytics
+type GlobalStats @entity(immutable: false) {
+  id: ID! # Always "global"
+  
+  # Platform Totals
+  totalProviders: BigInt!
+  totalPlans: BigInt!
+  totalSubscriptions: BigInt!
+  totalRevenue: BigDecimal!
+  totalProtocolFees: BigDecimal!
+  
+  # Activity Metrics
+  activeProviders: BigInt!
+  activePlans: BigInt!
+  activeSubscriptions: BigInt!
+  
+  # Growth Metrics
+  dailyActiveUsers: BigInt!
+  monthlyActiveUsers: BigInt!
+  
+  # Last Updated
+  lastUpdatedAt: BigInt!
+}
+
+# Time-series data for charts
+type DailyMetric @entity(immutable: false) {
+  id: ID! # Date in YYYY-MM-DD format
+  date: BigInt!
+  
+  # Daily Platform Metrics
+  newProviders: BigInt!
+  newPlans: BigInt!
+  newSubscriptions: BigInt!
+  totalRevenue: BigDecimal!
+  totalTransactions: BigInt!
+  
+  # User Activity
+  activeUsers: BigInt!
+  paymentVolume: BigDecimal!
+  avgTransactionValue: BigDecimal!
+}
+
+# Event Entities (for tracking raw events)
+type ProviderRegistered @entity(immutable: true) {
+  id: Bytes!
+  provider: Bytes!
+  name: String!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type PlanCreated @entity(immutable: true) {
+  id: Bytes!
+  planId: BigInt!
+  provider: Bytes!
+  price: BigInt!
+  interval: BigInt!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type SubscriptionCreated @entity(immutable: true) {
+  id: Bytes!
+  subscriptionId: BigInt!
+  user: Bytes!
+  planId: BigInt!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type PaymentProcessed @entity(immutable: true) {
+  id: Bytes!
+  from: Bytes!
+  to: Bytes!
+  amount: BigInt!
+  subscriptionId: BigInt!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type ProviderEarnings @entity(immutable: true) {
+  id: Bytes!
+  provider: Bytes!
+  planId: BigInt!
+  amount: BigInt!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type EscrowDeposit @entity(immutable: true) {
+  id: Bytes!
+  user: Bytes!
+  amount: BigInt!
+  newBalance: BigInt!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type EscrowWithdrawal @entity(immutable: true) {
+  id: Bytes!
+  user: Bytes!
+  amount: BigInt!
+  newBalance: BigInt!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
