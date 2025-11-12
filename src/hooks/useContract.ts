@@ -7,6 +7,7 @@ import {
   CONTRACT_ERRORS,
 } from "../contracts/contractconfig";
 import { useWallet } from "./useWallet";
+import { Plan } from "../types";
 
 // Add type declaration for window.ethereum
 declare global {
@@ -446,21 +447,114 @@ export const useStreamPayContract = () => {
     }
   };
 
-  // Get plan details by ID (you might need to add view functions to your contract)
+  // Get plan details by querying PlanCreated events
   const getPlanDetails = async (planId: string) => {
     try {
-      const contract = await getContract();
-      // These would need to be added to your contract as view functions
-      // For now, we'll return mock data but you should add these to the contract:
-      // function getPlanProvider(uint256 planId) external view returns (address)
-      // function getPlanPrice(uint256 planId) external view returns (uint256)
-      // function getPlanInterval(uint256 planId) external view returns (uint256)
+      const provider = new ethers.BrowserProvider(window.ethereum as any);
+      const contract = new ethers.Contract(
+        CONTRACT_CONFIG.CONTRACT_ADDRESS,
+        CONTRACT_CONFIG.CONTRACT_ABI,
+        provider
+      );
 
-      console.log("Getting plan details for:", planId);
-      return null; // Will need contract updates
-    } catch (error: any) {
-      console.error(error);
+      // Query PlanCreated events for this plan ID
+      const filter = contract.filters.PlanCreated(planId);
+      const events = await contract.queryFilter(filter);
+
+      if (events.length === 0) {
+        return null;
+      }
+
+      const event = events[0];
+      const parsedEvent = contract.interface.parseLog({
+        topics: event.topics as string[],
+        data: event.data,
+      });
+
+      if (parsedEvent && parsedEvent.args) {
+        return {
+          planId: parsedEvent.args.planId.toString(),
+          provider: parsedEvent.args.provider,
+          price: ethers.formatEther(parsedEvent.args.price),
+          interval: parsedEvent.args.interval.toString(),
+        };
+      }
+
       return null;
+    } catch (error: any) {
+      console.error("Error fetching plan details:", error);
+      return null;
+    }
+  };
+
+  // Fetch all plans with their details from contract events
+  const getAllPlansWithDetails = async () => {
+    try {
+      const provider = new ethers.BrowserProvider(window.ethereum as any);
+      const contract = new ethers.Contract(
+        CONTRACT_CONFIG.CONTRACT_ADDRESS,
+        CONTRACT_CONFIG.CONTRACT_ABI,
+        provider
+      );
+
+      // First get all plan IDs
+      const planIds = await contract[CONTRACT_FUNCTIONS.AllPlans]();
+      console.log("📋 Found plan IDs:", planIds);
+
+      // Query all PlanCreated events
+      const filter = contract.filters.PlanCreated();
+      const events = await contract.queryFilter(filter);
+
+      console.log("📊 Found PlanCreated events:", events.length);
+
+      // Map events to plan details
+      const plans = events
+        .map((event: any) => {
+          try {
+            const parsedEvent = contract.interface.parseLog({
+              topics: event.topics as string[],
+              data: event.data,
+            });
+
+            if (parsedEvent && parsedEvent.args) {
+              const planId = parsedEvent.args.planId.toString();
+              const intervalSeconds = Number(parsedEvent.args.interval.toString());
+              
+              // Convert interval to human-readable format
+              let interval: "monthly" | "yearly" = "monthly";
+              if (intervalSeconds >= 365 * 24 * 60 * 60) {
+                interval = "yearly";
+              } else if (intervalSeconds >= 30 * 24 * 60 * 60) {
+                interval = "monthly";
+              }
+
+              return {
+                id: planId,
+                providerId: parsedEvent.args.provider.toLowerCase(),
+                providerName: parsedEvent.args.provider.slice(0, 6) + "..." + parsedEvent.args.provider.slice(-4),
+                name: `Plan ${planId}`,
+                description: `Subscription plan #${planId}`,
+                price: ethers.formatEther(parsedEvent.args.price),
+                interval: interval,
+                isActive: true,
+                subscriberCount: 0, // Would need to query from subgraph
+                createdAt: new Date(event.blockNumber ? 0 : Date.now()).toISOString(),
+              };
+            }
+            return null;
+          } catch (e) {
+            console.error("Error parsing event:", e);
+            return null;
+          }
+        })
+        .filter((plan: any) => plan !== null) as Plan[];
+
+      console.log("✅ Parsed plans:", plans);
+      return plans as Plan[];
+    } catch (error: any) {
+      console.error("Error fetching plans with details:", error);
+      toast.error("Failed to fetch plans from contract");
+      throw error;
     }
   };
 
@@ -472,6 +566,7 @@ export const useStreamPayContract = () => {
     getUserBalance,
     processPayments,
     getAllPlans,
+    getAllPlansWithDetails,
     Deposite,
     isProviderRegistered,
     getPlanDetails,

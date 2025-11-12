@@ -9,28 +9,47 @@ import { Plan } from "../types";
 import { useWallet } from "../hooks/useWallet";
 
 export const Marketplace: React.FC = () => {
-  const { subscribe, isLoading } = useStreamPayContract();
+  const { subscribe, isLoading, getAllPlansWithDetails } = useStreamPayContract();
   const { isConnected } = useWallet();
   const [plans, setPlans] = useState<Plan[]>([]);
   const [filteredPlans, setFilteredPlans] = useState<Plan[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [loadingPlans, setLoadingPlans] = useState(true);
 
-  useEffect(() => {
-    const fetchPlans = async () => {
+  const fetchPlans = async () => {
+    try {
+      setLoadingPlans(true);
+      console.log("🔄 Fetching plans from contract...");
+      
+      // Try to fetch from contract first
       try {
-        const allPlans = await mockApi.getPlans();
-        const activePlans = allPlans.filter((plan) => plan.isActive);
-        setPlans(activePlans);
-        setFilteredPlans(activePlans);
-      } catch (error) {
-        console.error("Failed to fetch plans:", error);
-      } finally {
-        setLoadingPlans(false);
+        const contractPlans = await getAllPlansWithDetails();
+        if (contractPlans && contractPlans.length > 0) {
+          console.log("✅ Loaded plans from contract:", contractPlans.length);
+          setPlans(contractPlans);
+          setFilteredPlans(contractPlans);
+          setLoadingPlans(false);
+          return;
+        }
+      } catch (contractError) {
+        console.warn("⚠️ Failed to fetch from contract, falling back to mock data:", contractError);
       }
-    };
 
+      // Fallback to mock data if contract fetch fails
+      const allPlans = await mockApi.getPlans();
+      const activePlans = allPlans.filter((plan) => plan.isActive);
+      setPlans(activePlans);
+      setFilteredPlans(activePlans);
+    } catch (error) {
+      console.error("Failed to fetch plans:", error);
+    } finally {
+      setLoadingPlans(false);
+    }
+  };
+
+  useEffect(() => {
     fetchPlans();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -58,6 +77,10 @@ export const Marketplace: React.FC = () => {
         if (result.subscriptionId) {
           localStorage.setItem(`subscription_${planId}`, result.subscriptionId);
         }
+        // Refresh plans after successful subscription
+        setTimeout(() => {
+          fetchPlans();
+        }, 2000);
       }
     } catch (error) {
       console.error("Failed to subscribe:", error);
@@ -69,10 +92,21 @@ export const Marketplace: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Marketplace</h1>
-          <p className="text-gray-600">
-            Discover and subscribe to amazing Web3 services
-          </p>
+          <div className="flex justify-between items-center">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">Marketplace</h1>
+              <p className="text-gray-600">
+                Discover and subscribe to amazing Web3 services
+              </p>
+            </div>
+            <Button
+              variant="outline"
+              onClick={fetchPlans}
+              disabled={loadingPlans}
+            >
+              {loadingPlans ? "Loading..." : "🔄 Refresh"}
+            </Button>
+          </div>
         </div>
 
         {/* Search and Filters */}

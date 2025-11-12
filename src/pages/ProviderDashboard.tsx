@@ -6,12 +6,14 @@ import { EarningsChart } from "../components/EarningsChart";
 import { Card, CardContent, CardHeader } from "../components/ui/Card";
 import { Button } from "../components/ui/Button";
 import { useStreamPayContract } from "../hooks/useContract";
+import { useWallet } from "../hooks/useWallet";
 import { mockApi } from "../services/mockApi";
 import { Plan } from "../types";
 
 export const ProviderDashboard: React.FC = () => {
-  const { deactivatePlan, withdrawEarnings, isLoading, isProviderRegistered } =
+  const { deactivatePlan, withdrawEarnings, isLoading, isProviderRegistered, getAllPlansWithDetails } =
     useStreamPayContract();
+  const { address } = useWallet();
   const [plans, setPlans] = useState<Plan[]>([]);
   const [loadingPlans, setLoadingPlans] = useState(true);
   const [providerRegistered, setProviderRegistered] = useState<boolean>(false);
@@ -20,7 +22,28 @@ export const ProviderDashboard: React.FC = () => {
   useEffect(() => {
     const fetchPlans = async () => {
       try {
-        // In a real app, this would be filtered by the connected wallet
+        setLoadingPlans(true);
+        console.log("🔄 Fetching plans from contract for provider dashboard...");
+        
+        // Try to fetch from contract first
+        try {
+          const contractPlans = await getAllPlansWithDetails();
+          if (contractPlans && contractPlans.length > 0) {
+            // Filter plans by current provider address
+            const providerPlans = address 
+              ? contractPlans.filter((plan) => plan.providerId.toLowerCase() === address.toLowerCase())
+              : contractPlans;
+            
+            console.log("✅ Loaded provider plans from contract:", providerPlans.length);
+            setPlans(providerPlans);
+            setLoadingPlans(false);
+            return;
+          }
+        } catch (contractError) {
+          console.warn("⚠️ Failed to fetch from contract, falling back to mock data:", contractError);
+        }
+
+        // Fallback to mock data if contract fetch fails
         const allPlans = await mockApi.getPlans();
         setPlans(allPlans);
       } catch (error) {
@@ -31,7 +54,7 @@ export const ProviderDashboard: React.FC = () => {
     };
 
     fetchPlans();
-  }, []);
+  }, [getAllPlansWithDetails, address]);
 
   const handleDeactivatePlan = async (planId: string) => {
     try {
