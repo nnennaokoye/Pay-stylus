@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { usePay-StylusContract } from "../hooks/useContract";
+import { usePayStylusContract } from "../hooks/useContract";
 import { useWallet } from "../hooks/useWallet";
 import { Card, CardContent, CardHeader } from "../components/ui/Card";
 import { Button } from "../components/ui/Button";
@@ -14,7 +14,7 @@ export const TestPage: React.FC = () => {
     getUserBalance,
     isProviderRegistered,
     isLoading,
-  } = usePay-StylusContract();
+  } = usePayStylusContract();
 
   const { isConnected, address } = useWallet();
   const [plans, setPlans] = useState<any[]>([]);

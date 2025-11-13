@@ -17,7 +17,7 @@ declare global {
   }
 }
 
-export const useStreamPayContract = () => {
+export const usePayStylusContract = () => {
   const { isConnected, address } = useWallet();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -274,8 +274,10 @@ export const useStreamPayContract = () => {
 
       // Check if we have enough balance first
       const provider = await getProvider();
-      const bal = await provider.getBalance(address);
-      console.log("Wallet balance:", ethers.formatEther(bal), "ETH");
+      if (address) {
+        const bal = await provider.getBalance(address);
+        console.log("Wallet balance:", ethers.formatEther(bal), "ETH");
+      }
 
       // The subscribe function returns the subscription ID directly
       console.log("📝 Calling contract.subscribe...");

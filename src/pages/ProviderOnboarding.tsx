@@ -1,22 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "../components/ui/Button";
 import { Input } from "../components/ui/Input";
 import { Select } from "../components/ui/Select";
 import { Card, CardContent, CardHeader } from "../components/ui/Card";
-import { usePay-StylusContract } from "../hooks/useContract";
+import { usePayStylusContract } from "../hooks/useContract";
 import { mockApi } from "../services/mockApi";
 import { useWallet } from "../hooks/useWallet";
 
 export const ProviderOnboarding: React.FC = () => {
   const navigate = useNavigate();
-  const { registerProvider, createPlan, isProviderRegistered } =
-    usePay-StylusContract();
+  const { registerProvider, createPlan } =
+    usePayStylusContract();
   const { isConnected, address } = useWallet();
-  const [alreadyRegistered, setAlreadyRegistered] = useState<boolean>(false);
-  const [checkingRegistration, setCheckingRegistration] =
-    useState<boolean>(true);
 
   const [formData, setFormData] = useState({
     name: "",

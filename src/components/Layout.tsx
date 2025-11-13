@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Zap, Menu, X } from "lucide-react";
-import { ConnectButton } from "@reown/appkit/react";
+import { WalletConnect } from "./WalletConnect";
 import { useWallet } from "../hooks/useWallet";
 
 interface LayoutProps {
@@ -35,7 +35,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                 <Zap className="w-6 h-6 text-white" />
               </div>
               <span className="text-xl font-bold bg-gradient-to-r from-cyan-700 to-teal-600 bg-clip-text text-transparent">
-                StreamPay
+                PayStylus
               </span>
             </Link>
 
@@ -73,7 +73,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                   {address?.slice(0, 6)}...{address?.slice(-4)}
                 </span>
               )}
-              <ConnectButton />
+              <WalletConnect />
             </div>
           </div>
 

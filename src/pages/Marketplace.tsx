@@ -3,13 +3,13 @@ import { Search, Filter } from "lucide-react";
 import { PlanCard } from "../components/PlanCard";
 import { Input } from "../components/ui/Input";
 import { Button } from "../components/ui/Button";
-import { usePay-StylusContract } from "../hooks/useContract";
+import { usePayStylusContract } from "../hooks/useContract";
 import { mockApi } from "../services/mockApi";
 import { Plan } from "../types";
 import { useWallet } from "../hooks/useWallet";
 
 export const Marketplace: React.FC = () => {
-  const { subscribe, isLoading, getAllPlansWithDetails } = usePay-StylusContract();
+  const { subscribe, isLoading, getAllPlansWithDetails } = usePayStylusContract();
   const { isConnected } = useWallet();
   const [plans, setPlans] = useState<Plan[]>([]);
   const [filteredPlans, setFilteredPlans] = useState<Plan[]>([]);

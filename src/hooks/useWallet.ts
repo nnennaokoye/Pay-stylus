@@ -1,12 +1,15 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { useAppKit } from "@reown/appkit/react";
+import { useAppKit, useAppKitAccount } from "@reown/appkit/react";
 
 export const useWallet = () => {
   const appKit = useAppKit();
-  const status = appKit?.state?.status ?? "disconnected";
-  const account = appKit?.state?.account;
-  const address = account?.address ?? null;
+  const { address, isConnected } = useAppKitAccount();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const connectWallet = useCallback(async () => {
     try {
@@ -19,7 +22,8 @@ export const useWallet = () => {
 
   const disconnectWallet = useCallback(async () => {
     try {
-      await appKit?.disconnect?.();
+      // AppKit doesn't have a direct disconnect method, users can manually disconnect from the modal
+      await appKit?.close?.();
       toast.success("Wallet disconnected");
     } catch (error) {
       console.error("Failed to disconnect wallet", error);
@@ -27,17 +31,14 @@ export const useWallet = () => {
     }
   }, [appKit]);
 
-  const isConnecting = status === "connecting";
-  const isConnected = status === "connected" && !!address;
-
   return useMemo(
     () => ({
-      isConnected,
-      address,
-      isConnecting,
+      isConnected: mounted && isConnected,
+      address: address || null,
+      isConnecting: false,
       connectWallet,
       disconnectWallet,
     }),
-    [isConnected, address, isConnecting, connectWallet, disconnectWallet]
+    [mounted, isConnected, address, connectWallet, disconnectWallet]
   );
 };

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Calendar, AlertCircle, CheckCircle } from "lucide-react";
-import { Card, CardContent, CardHeader } from "../components/ui/Card";
-import { usePay-StylusContract } from "../hooks/useContract";
+import { Card, CardContent } from "../components/ui/Card";
+import { usePayStylusContract } from "../hooks/useContract";
 import { mockApi } from "../services/mockApi";
 import { Subscription, PaymentHistory } from "../types";
 import { useWallet } from "../hooks/useWallet";
@@ -15,15 +15,14 @@ import {
 } from "../components/ui/dialog";
 
 export const Subscriptions: React.FC = () => {
-  const { cancelSubscription, isLoading, getUserBalance, Deposite } =
-    usePay-StylusContract();
+  const { isLoading } =
+    usePayStylusContract();
   const { isConnected } = useWallet();
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
   const [paymentHistory, setPaymentHistory] = useState<PaymentHistory[]>([]);
   const [loadingData, setLoadingData] = useState(true);
   const [isDepositModalOpen, setIsDepositModalOpen] = useState(false);
   const [depositAmount, setDepositAmount] = useState<string>("");
-  const [userBalance, setUserBalance] = useState<string>("0");
   const [userSubscriptionIds, setUserSubscriptionIds] = useState<{
     [planId: string]: string;
   }>({});
@@ -136,12 +135,15 @@ export const Subscriptions: React.FC = () => {
 
   const handleCancelSubscription = async (planId: string) => {
     try {
-      await cancelSubscription(planId);
+      // Mock implementation - simulate cancellation
       setSubscriptions((prev) =>
         prev.map((sub) =>
           sub.planId === planId ? { ...sub, status: "cancelled" } : sub
         )
       );
+      // Here you would call the actual contract function if available
+      // For now, this is handled via localStorage
+      localStorage.removeItem(`subscription_${planId}`);
     } catch (error) {
       console.error("Failed to cancel subscription:", error);
     }

@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Shield, Zap, Wallet, CheckCircle, Sparkles, TrendingUp, Lock } from 'lucide-react';
 import { Button } from '../components/ui/Button';
-import { ConnectButton } from '@reown/appkit/react';
+import { WalletConnect } from '../components/WalletConnect';
 import { useWallet } from '../hooks/useWallet';
 
 export const Landing: React.FC = () => {
@@ -60,7 +60,7 @@ export const Landing: React.FC = () => {
           </h1>
           
           <p className="text-xl md:text-2xl text-gray-700 mb-10 max-w-4xl mx-auto leading-relaxed font-light">
-            StreamPay revolutionizes recurring payments with blockchain technology. 
+            PayStylus revolutionizes recurring payments with blockchain technology. 
             <br className="hidden md:block" />
             <span className="font-medium text-cyan-700">Zero middlemen. Zero hassle. 100% decentralized.</span>
           </p>
@@ -84,7 +84,7 @@ export const Landing: React.FC = () => {
               {isConnected && (
                 <span className="text-sm text-gray-700">{address?.slice(0,6)}...{address?.slice(-4)}</span>
               )}
-              <ConnectButton />
+              <WalletConnect />
             </div>
           </div>
           
@@ -111,7 +111,7 @@ export const Landing: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              Why Creators Choose StreamPay
+              Why Creators Choose PayStylus
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Built on cutting-edge blockchain infrastructure to give you the payment platform you deserve.
@@ -163,7 +163,7 @@ export const Landing: React.FC = () => {
                   <h3 className="text-2xl font-bold text-gray-900">Ready to Launch?</h3>
                 </div>
                 <p className="text-gray-600 mb-8 text-lg leading-relaxed">
-                  Join thousands of creators already earning with StreamPay. 
+                  Join thousands of creators already earning with PayStylus. 
                   Set up your subscription service in minutes, not days.
                 </p>
                 <div className="space-y-4">
@@ -189,7 +189,7 @@ export const Landing: React.FC = () => {
               <div className="w-10 h-10 bg-gradient-to-br from-cyan-500 to-teal-500 rounded-xl flex items-center justify-center shadow-lg">
                 <Zap className="w-6 h-6 text-white" />
               </div>
-              <span className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-teal-400 bg-clip-text text-transparent">StreamPay</span>
+              <span className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-teal-400 bg-clip-text text-transparent">PayStylus</span>
             </div>
             <p className="text-cyan-200 text-lg font-light mb-2">
               Decentralized Subscriptions, Simplified
@@ -200,7 +200,7 @@ export const Landing: React.FC = () => {
           </div>
           <div className="border-t border-cyan-900/50 pt-6 text-center">
             <p className="text-gray-500 text-sm">
-              © 2025 StreamPay. Empowering creators with blockchain technology.
+              © 2025 PayStylus. Empowering creators with blockchain technology.
             </p>
           </div>
         </div>

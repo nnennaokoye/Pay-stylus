@@ -1,23 +1,23 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { DollarSign, Users, TrendingUp, Calendar } from "lucide-react";
 import { StatsCard } from "../components/StatsCard";
 import { PlanCard } from "../components/PlanCard";
 import { EarningsChart } from "../components/EarningsChart";
 import { Card, CardContent, CardHeader } from "../components/ui/Card";
 import { Button } from "../components/ui/Button";
-import { usePay-StylusContract } from "../hooks/useContract";
+import { usePayStylusContract } from "../hooks/useContract";
 import { useWallet } from "../hooks/useWallet";
 import { mockApi } from "../services/mockApi";
 import { Plan } from "../types";
 
 export const ProviderDashboard: React.FC = () => {
-  const { deactivatePlan, withdrawEarnings, isLoading, isProviderRegistered, getAllPlansWithDetails } =
-    usePay-StylusContract();
+  const navigate = useNavigate();
+  const { withdrawEarnings, isLoading, getAllPlansWithDetails } =
+    usePayStylusContract();
   const { address } = useWallet();
   const [plans, setPlans] = useState<Plan[]>([]);
   const [loadingPlans, setLoadingPlans] = useState(true);
-  const [providerRegistered, setProviderRegistered] = useState<boolean>(false);
-  const [checkingRegistration, setCheckingRegistration] = useState(true);
 
   useEffect(() => {
     const fetchPlans = async () => {
@@ -56,18 +56,7 @@ export const ProviderDashboard: React.FC = () => {
     fetchPlans();
   }, [getAllPlansWithDetails, address]);
 
-  const handleDeactivatePlan = async (planId: string) => {
-    try {
-      await deactivatePlan(planId);
-      setPlans((prev) =>
-        prev.map((plan) =>
-          plan.id === planId ? { ...plan, isActive: false } : plan
-        )
-      );
-    } catch (error) {
-      console.error("Failed to deactivate plan:", error);
-    }
-  };
+  // Deactivate plan not supported in current contract hook; hiding deactivate UI
 
   const handleWithdraw = async () => {
     try {
@@ -164,7 +153,7 @@ export const ProviderDashboard: React.FC = () => {
                   </h2>
                   <Button
                     onClick={handleWithdraw}
-                    isLoading={isLoading}
+                    disabled={isLoading}
                     size="sm"
                   >
                     Withdraw Available
@@ -249,7 +238,6 @@ export const ProviderDashboard: React.FC = () => {
                   <PlanCard
                     key={plan.id}
                     plan={plan}
-                    onDeactivate={handleDeactivatePlan}
                     isProvider
                     isLoading={isLoading}
                   />
