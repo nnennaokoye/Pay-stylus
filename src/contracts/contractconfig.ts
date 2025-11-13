@@ -1,4 +1,4 @@
-import CONTRACT_ABI_JSON from "../../complete-abi.json" assert { type: "json" };
+import CONTRACT_ABI_JSON from "../../smart-contract/abi.json" assert { type: "json" };
 
 export const CONTRACT_CONFIG = {
   CONTRACT_ADDRESS: "0xdbb07ad146a1db553811a26c1e838bfa7fdb84cf",
