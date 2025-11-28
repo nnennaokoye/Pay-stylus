@@ -65,23 +65,23 @@ export const ProviderOnboarding: React.FC = () => {
     if (!validateForm()) return;
 
     try {
-      console.log("🚀 Starting provider registration process...");
+      console.log(" Starting provider registration process...");
       setErrors({});
 
       // Step 1: Register provider on blockchain FIRST
-      console.log("📝 Step 1: Registering provider on blockchain...");
+      console.log(" Step 1: Registering provider on blockchain...");
       const registerTx = await registerProvider(formData.name);
-      console.log("✅ Provider registered on blockchain:", registerTx.hash);
+      console.log(" Provider registered on blockchain:", registerTx.hash);
 
       // Step 2: Create plan on blockchain
-      console.log("📝 Step 2: Creating plan on blockchain...");
+      console.log(" Step 2: Creating plan on blockchain...");
       const planTx = await createPlan(formData.price, intervalSeconds, "");
-      console.log("✅ Plan created on blockchain:", planTx.transactionHash);
+      console.log(" Plan created on blockchain:", planTx.transactionHash);
 
-      console.log("🎉 Provider registration complete!");
+      console.log(" Provider registration complete!");
       navigate("/provider");
     } catch (error: any) {
-      console.error("❌ Provider registration failed:", error);
+      console.error(" Provider registration failed:", error);
 
       let errorMessage = "Failed to create provider account. Please try again.";
       if (error.reason) {

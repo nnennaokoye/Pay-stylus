@@ -42,9 +42,9 @@ export const ProviderDashboard: React.FC = () => {
           (plan) => plan.providerId.toLowerCase() === address.toLowerCase()
         );
 
-        console.log("✅ Loaded provider plans from contract:", providerPlans.length);
-        console.log("✅ Loaded recent subscribers from contract:", subscribers.length);
-        console.log("✅ Loaded earnings data from contract:", earnings.length);
+        console.log(" Loaded provider plans from contract:", providerPlans.length);
+        console.log(" Loaded recent subscribers from contract:", subscribers.length);
+        console.log(" Loaded earnings data from contract:", earnings.length);
         
         setPlans(providerPlans);
         setRecentSubscribers(subscribers);
