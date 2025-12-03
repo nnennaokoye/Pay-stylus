@@ -87,20 +87,20 @@ export const usePayStylusContract = () => {
   // Initialize provider and contract
   const getContract = async () => {
     if (!isConnected || !address) throw new Error(CONTRACT_ERRORS.Unauthorized);
-    console.log("🔗 Initializing blockchain connection...");
+    console.log(" Initializing blockchain connection...");
 
     const eip1193 = await getEip1193Provider();
     const provider = new ethers.BrowserProvider(eip1193 as any);
     const network = await provider.getNetwork();
     console.log(
-      "📡 Connected to network:",
+      " Connected to network:",
       network.name,
       "Chain ID:",
       network.chainId.toString()
     );
 
     if (network.chainId !== BigInt(CONTRACT_CONFIG.NETWORK_ID)) {
-      console.log("🔄 Wrong network detected, attempting to switch...");
+      console.log(" Wrong network detected, attempting to switch...");
       try {
         await (eip1193 as any).request?.({
           method: "wallet_switchEthereumChain",
