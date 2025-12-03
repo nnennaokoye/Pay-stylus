@@ -142,7 +142,7 @@ export const usePayStylusContract = () => {
             );
           }
         } else {
-          console.error(" Failed to switch network:", switchError);
+          console.error("Failed to switch network:", switchError);
           throw new Error(
             `Please switch to Arbitrum Sepolia (Chain ID: ${CONTRACT_CONFIG.NETWORK_ID}) in your wallet`
           );
@@ -152,7 +152,7 @@ export const usePayStylusContract = () => {
 
     const signer = await provider.getSigner();
     const signerAddress = await signer.getAddress();
-    console.log("👤 Signer address:", signerAddress);
+    console.log(" Signer address:", signerAddress);
 
     // Use read-only RPC for contract code verification to avoid wallet RPC rate limits
     const readProvider = getReadProvider();
@@ -160,7 +160,7 @@ export const usePayStylusContract = () => {
     if (code === "0x") {
       throw new Error("Contract not found at the specified address");
     }
-    console.log("✅ Contract verified at:", CONTRACT_CONFIG.CONTRACT_ADDRESS);
+    console.log("Contract verified at:", CONTRACT_CONFIG.CONTRACT_ADDRESS);
 
     return new ethers.Contract(
       CONTRACT_CONFIG.CONTRACT_ADDRESS,
