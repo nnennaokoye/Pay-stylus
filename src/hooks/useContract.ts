@@ -134,15 +134,15 @@ export const usePayStylusContract = () => {
                 },
               ],
             });
-            console.log("✅ Arbitrum Sepolia network added and switched");
+            console.log(" Arbitrum Sepolia network added and switched");
           } catch (addError) {
-            console.error("❌ Failed to add network:", addError);
+            console.error(" Failed to add network:", addError);
             throw new Error(
               "Please manually add Arbitrum Sepolia network to your wallet"
             );
           }
         } else {
-          console.error("❌ Failed to switch network:", switchError);
+          console.error(" Failed to switch network:", switchError);
           throw new Error(
             `Please switch to Arbitrum Sepolia (Chain ID: ${CONTRACT_CONFIG.NETWORK_ID}) in your wallet`
           );
