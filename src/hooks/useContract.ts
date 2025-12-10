@@ -382,7 +382,7 @@ export const usePayStylusContract = () => {
 
       return { tx, subscriptionId, receipt };
     } catch (error: any) {
-      console.error("❌ Subscription failed:", error);
+      console.error(" Subscription failed:", error);
       console.error("Error details:", {
         message: error.message,
         reason: error.reason,
@@ -561,14 +561,14 @@ export const usePayStylusContract = () => {
 
       // First get all plan IDs
       const planIds = await contract[CONTRACT_FUNCTIONS.AllPlans]();
-      console.log("📋 Found plan IDs:", planIds);
+      console.log(" Found plan IDs:", planIds);
 
       // Query all PlanCreated events
       const filter = contract.filters.PlanCreated();
       const { fromBlock, toBlock } = await getRecentBlockRange(provider);
       const events = await queryFilterChunked(contract, filter, fromBlock, toBlock);
 
-      console.log("📊 Found PlanCreated events:", events.length);
+      console.log(" Found PlanCreated events:", events.length);
 
       // Map events to plan details
       const plans = events
@@ -612,7 +612,7 @@ export const usePayStylusContract = () => {
         })
         .filter((plan: any) => plan !== null) as Plan[];
 
-      console.log("✅ Parsed plans:", plans);
+      console.log(" Parsed plans:", plans);
       return plans as Plan[];
     } catch (error: any) {
       // Log the full error for debugging (RPC/network/parse issues)
