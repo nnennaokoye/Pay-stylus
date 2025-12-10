@@ -203,14 +203,14 @@ export const usePayStylusContract = () => {
         );
       }
       console.log(
-        "✅ Transaction verified on blockchain:",
+        "Transaction verified on blockchain:",
         verifyTx.blockNumber
       );
 
       toast.success("Provider registered successfully!");
       return tx;
     } catch (error: any) {
-      console.error("❌ Provider registration failed:", error);
+      console.error("Provider registration failed:", error);
       console.error("Error details:", {
         message: error.message,
         reason: error.reason,
@@ -240,18 +240,18 @@ export const usePayStylusContract = () => {
   ) => {
     setIsLoading(true);
     try {
-      console.log("🔗 Getting contract for plan creation...");
+      console.log("Getting contract for plan creation...");
       const contract = await getContract();
       const priceWei = ethers.parseEther(price); // Convert ETH to Wei
 
-      console.log("📋 Plan creation details:");
+      console.log("Plan creation details:");
       console.log("  - Price (ETH):", price);
       console.log("  - Price (Wei):", priceWei.toString());
       console.log("  - Interval (seconds):", interval);
       console.log("  - Metadata hash:", metadataHash);
       console.log("  - Function:", CONTRACT_FUNCTIONS.CreatePlan);
 
-      console.log("📤 Sending plan creation transaction...");
+      console.log("Sending plan creation transaction...");
       const tx = await contract[CONTRACT_FUNCTIONS.CreatePlan](
         priceWei,
         interval,
@@ -261,11 +261,11 @@ export const usePayStylusContract = () => {
         }
       );
 
-      console.log("✅ Transaction sent:", tx.hash);
-      console.log("⏳ Waiting for confirmation...");
+      console.log("Transaction sent:", tx.hash);
+      console.log("Waiting for confirmation...");
 
       const receipt = await tx.wait();
-      console.log("🎉 Plan creation confirmed!");
+      console.log("Plan creation confirmed!");
       console.log("📋 Receipt:", receipt);
 
       // VERIFY the transaction actually exists on blockchain
