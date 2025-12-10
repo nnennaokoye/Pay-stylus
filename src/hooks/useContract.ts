@@ -335,9 +335,9 @@ export const usePayStylusContract = () => {
       });
 
       console.log("Transaction sent:", tx.hash);
-      console.log("⏳ Waiting for confirmation...");
+      console.log(" Waiting for confirmation...");
       const receipt = await tx.wait();
-      console.log("✅ Transaction confirmed:", receipt);
+      console.log(" Transaction confirmed:", receipt);
 
       // Try to get subscription ID from events (if available)
       let subscriptionId = null;
@@ -355,7 +355,7 @@ export const usePayStylusContract = () => {
 
             if (parsed && parsed.name === "SubscriptionCreated") {
               subscriptionId = parsed.args.subscriptionId?.toString();
-              console.log("✅ Found subscription ID:", subscriptionId);
+              console.log(" Found subscription ID:", subscriptionId);
               break;
             }
           } catch (e) {
