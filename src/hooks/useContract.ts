@@ -173,7 +173,7 @@ export const usePayStylusContract = () => {
   const registerProvider = async (name: string) => {
     setIsLoading(true);
     try {
-      console.log(" Getting contract for provider registration...");
+      console.log("Getting contract for provider registration...");
       const contract = await getContract();
 
       console.log("Contract details:");
@@ -194,7 +194,7 @@ export const usePayStylusContract = () => {
       console.log("Receipt:", receipt);
 
       // VERIFY the transaction actually exists on blockchain
-      console.log("🔍 Verifying transaction on blockchain...");
+      console.log("Verifying transaction on blockchain...");
       const verifyProvider = await getProvider();
       const verifyTx = await verifyProvider.getTransaction(tx.hash);
       if (!verifyTx) {
